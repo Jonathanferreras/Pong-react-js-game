@@ -21,12 +21,6 @@ class Pong extends Component {
           x : 10,
           y : 4
         }
-      },
-      paddle : {
-        left : 250,
-        right : 250,
-        height : 50,
-        width : 10
       }
     }
   }
