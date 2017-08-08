@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Canvas from './canvas';
 
 export default class Paddle extends Component {
   constructor(args){
@@ -9,7 +8,6 @@ export default class Paddle extends Component {
     this.pos = args.paddle_pos;
     this.height = args.paddle_height;
     this.width = args.paddle_width;
-
     }
 
   draw(canvas_context){
