@@ -14,8 +14,8 @@ export default class Ball extends Component {
 
     this.state = { speed : 5 }
 
-    this.ball_x_speed = this.state.speed;
-    this.ball_y_speed = this.state.speed;
+    this.x_speed = this.state.speed;
+    this.y_speed = this.state.speed;
   }
 
   draw(context){
@@ -26,15 +26,15 @@ export default class Ball extends Component {
   }
 
   move(){
-    this.x += this.ball_x_speed;
-    this.y += this.ball_y_speed;
+    this.x += this.x_speed;
+    this.y += this.y_speed;
 
     if(this.x < 0 || this.x > this.canvas_width){
-      this.ball_x_speed = -this.ball_x_speed;
+      this.x_speed = -this.x_speed;
     }
 
     if(this.y < 0 || this.y > this.canvas_height){
-      this.ball_y_speed = -this.ball_y_speed;
+      this.y_speed = -this.y_speed;
     }
   }
 

@@ -13,7 +13,13 @@ class Pong extends Component {
       canvas : {
         width : "500",
         height : "400"
-      }
+      },
+      score: {
+        player1 : 0,
+        player2 : 0,
+        max : 3
+      },
+      player_won : false
     }
   }
 
@@ -23,7 +29,6 @@ class Pong extends Component {
   }
 
   startGame(){
-
     this.board = new Board({
       canvas_width : this.state.canvas.width,
       canvas_height : this.state.canvas.height
@@ -71,10 +76,10 @@ class Pong extends Component {
       this.update();
       this.ball.move();
       this.computerAI();
+      this.ballDeflect();
     }.bind(this), 1000/frames_per_second);
 
     this.playerCtrl();
-
   }
 
   playerCtrl(){
@@ -92,6 +97,32 @@ class Pong extends Component {
     } else if(center > this.ball.y - 15){
       this.paddle_two.pos -= 5;
     }
+  }
+
+  ballDeflect(){
+    if(this.ball.x < 0){
+      this.ballRedirect(this.paddle_one);
+      this.ballRedirect(this.paddle_two);
+    }
+  }
+
+  ballRedirect(paddle){
+    if(this.ball.x < 0){
+      if(this.ball.y > paddle.pos && this.ball.y < paddle.pos + paddle.height){
+        this.ball.x_speed = -this.ball.x_speed;
+
+        var delta_y = this.ball.y - (paddle.pos + (paddle.height / 2));
+        this.ball.y_speed = delta_y * 0.25;
+      } else {
+        this.ballReset();
+      }
+    }
+  }
+
+  ballReset(){
+    this.ball.x_speed = -this.ball.x_speed;
+    this.ball.x = this.state.canvas.width / 2;
+    this.ball.y = this.state.canvas.height / 2;
   }
 
   render(){
