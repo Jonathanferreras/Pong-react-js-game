@@ -16,8 +16,6 @@ export default class Ball extends Component {
 
     this.ball_x_speed = this.state.speed;
     this.ball_y_speed = this.state.speed;
-
-
   }
 
   draw(context){

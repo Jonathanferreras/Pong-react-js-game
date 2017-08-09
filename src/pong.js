@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Board from './board';
-import Ball from './ball';
-import Paddle from './paddle';
+
+import Board from './components/board';
+import Ball from './components/ball';
+import Paddle from './components/paddle';
 
 class Pong extends Component {
   constructor(){
@@ -17,12 +18,11 @@ class Pong extends Component {
   }
 
   componentDidMount(){
-    let context = this.refs.gameCanvas.getContext('2d');
+    let context = ReactDOM.findDOMNode(this.refs.gameCanvas).getContext('2d');
     this.context = context;
   }
 
   startGame(){
-    const context = this.context;
 
     this.board = new Board({
       canvas_width : this.state.canvas.width,
@@ -44,14 +44,14 @@ class Pong extends Component {
       paddle_wall : 5,
       paddle_pos : 150,
       paddle_height : 50,
-      paddle_width : 10
+      paddle_width : 10,
     });
 
     this.paddle_two = new Paddle({
       paddle_wall : (this.state.canvas.width - 15),
       paddle_pos : 150,
       paddle_height : 50,
-      paddle_width : 10
+      paddle_width : 10,
     });
 
     this.animate();
@@ -65,10 +65,33 @@ class Pong extends Component {
   }
 
   animate(){
+    const frames_per_second = 30;
+
     setInterval(function(){
       this.update();
       this.ball.move();
-    }.bind(this), 1000/30);
+      this.computerAI();
+    }.bind(this), 1000/frames_per_second);
+
+    this.playerCtrl();
+
+  }
+
+  playerCtrl(){
+    document.addEventListener('mousemove', (function(event){
+      if(event.clientY < this.state.canvas.height){
+      this.paddle_one.pos = event.clientY - (this.paddle_one.height / 2);
+      }
+    }).bind(this));
+  }
+
+  computerAI(){
+    var center = this.paddle_two.pos + (this.paddle_two.height / 2);
+    if(center < this.ball.y + 15){
+      this.paddle_two.pos += 5;
+    } else if(center > this.ball.y - 15){
+      this.paddle_two.pos -= 5;
+    }
   }
 
   render(){

@@ -10,9 +10,9 @@ export default class Paddle extends Component {
     this.width = args.paddle_width;
     }
 
-  draw(canvas_context){
-    canvas_context.fillStyle = 'white';
-    canvas_context.fillRect(this.wall, this.pos, this.width, this.height);
+  draw(context){
+    context.fillStyle = 'white';
+    context.fillRect(this.wall, this.pos, this.width, this.height);
   }
 
   render(){
