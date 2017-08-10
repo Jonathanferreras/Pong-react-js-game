@@ -59,27 +59,52 @@ class Pong extends Component {
       paddle_width : 10,
     });
 
-    this.animate();
+    this.update();
   }
 
   update(){
+    const frames_per_second = 30;
+
+    setInterval(function(){
+      this.elements();
+      this.movement();
+    }.bind(this), 1000 / frames_per_second);
+
+    this.playerCtrl();
+  }
+
+  elements(){
     this.board.draw(this.context);
     this.ball.draw(this.context);
     this.paddle_one.draw(this.context);
     this.paddle_two.draw(this.context);
   }
 
-  animate(){
-    const frames_per_second = 30;
+  movement(){
+    this.ball.move();
+    this.computerAI();
 
-    setInterval(function(){
-      this.update();
-      this.ball.move();
-      this.computerAI();
-      this.ballDeflect();
-    }.bind(this), 1000/frames_per_second);
+    if(this.ball.x < 0){
+      if(this.ball.y > this.paddle_one.pos && this.ball.y < this.paddle_one.pos + this.paddle_one.height){
+        this.ball.x_speed = -this.ball.x_speed;
 
-    this.playerCtrl();
+        var delta_y = this.ball.y - (this.paddle_one.pos + (this.paddle_one.height / 2));
+        this.ball.y_speed = delta_y * 0.25;
+      } else{
+        this.ball.reset();
+      }
+    }
+
+    if(this.ball.x > this.state.canvas.width){
+      if(this.ball.y > this.paddle_two.pos && this.ball.y < this.paddle_two.pos + this.paddle_two.height){
+        this.ball.x_speed = -this.ball.x_speed;
+
+        var delta_y = this.ball.y - (this.paddle_two.pos + (this.paddle_two.height / 2));
+        this.ball.y_speed = delta_y * 0.25;
+      } else{
+        this.ball.reset();
+      }
+    }
   }
 
   playerCtrl(){
@@ -97,32 +122,6 @@ class Pong extends Component {
     } else if(center > this.ball.y - 15){
       this.paddle_two.pos -= 5;
     }
-  }
-
-  ballDeflect(){
-    if(this.ball.x < 0){
-      this.ballRedirect(this.paddle_one);
-      this.ballRedirect(this.paddle_two);
-    }
-  }
-
-  ballRedirect(paddle){
-    if(this.ball.x < 0){
-      if(this.ball.y > paddle.pos && this.ball.y < paddle.pos + paddle.height){
-        this.ball.x_speed = -this.ball.x_speed;
-
-        var delta_y = this.ball.y - (paddle.pos + (paddle.height / 2));
-        this.ball.y_speed = delta_y * 0.25;
-      } else {
-        this.ballReset();
-      }
-    }
-  }
-
-  ballReset(){
-    this.ball.x_speed = -this.ball.x_speed;
-    this.ball.x = this.state.canvas.width / 2;
-    this.ball.y = this.state.canvas.height / 2;
   }
 
   render(){

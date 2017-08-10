@@ -29,13 +29,15 @@ export default class Ball extends Component {
     this.x += this.x_speed;
     this.y += this.y_speed;
 
-    if(this.x < 0 || this.x > this.canvas_width){
-      this.x_speed = -this.x_speed;
-    }
-
     if(this.y < 0 || this.y > this.canvas_height){
       this.y_speed = -this.y_speed;
     }
+  }
+
+  reset(){
+    this.x_speed = -this.x_speed;
+    this.x = this.canvas_width / 2;
+    this.y = this.canvas_height / 2;
   }
 
   render(){
